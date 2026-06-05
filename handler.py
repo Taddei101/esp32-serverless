@@ -64,7 +64,7 @@ def _avaliar_alerta_interno(leitura: dict) -> dict:
     temp = leitura.get("temperatura", 0)
     limite = float(os.environ.get("TEMP_LIMITE_ALERTA", 60))
 
-    if temp >= limite + 20:       # ex: >= 70°C
+    if temp >= limite + 10:       # ex: >= 70°C
         nivel = "critico"
         deve_notificar = True
         mensagem = f"🔴 CRÍTICO: {temp:.1f}°C — acima de {limite + 10}°C!"
