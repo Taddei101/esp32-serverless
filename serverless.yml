@@ -1,0 +1,48 @@
+service: esp32-monitor
+
+useDotenv: true
+
+provider:
+  name: aws          # o Serverless Framework exige um provider
+  runtime: python3.11 # mas com serverless-offline ele nunca chega na AWS
+  stage: dev
+  region: us-east-1
+  environment:
+    CALLMEBOT_KEY: ${env:CALLMEBOT_KEY}
+    CALLMEBOT_PHONE: ${env:CALLMEBOT_PHONE}
+    TEMP_LIMITE_ALERTA: ${env:TEMP_LIMITE_ALERTA}
+
+functions:
+  receber_leitura:
+    handler: handler.receber_leitura
+    events:
+      - http:
+          path: temperatura
+          method: post
+          cors: true
+
+  avaliar_alerta:
+    handler: handler.avaliar_alerta
+    events:
+      - http:
+          path: avaliar
+          method: post
+          cors: true
+
+  notificar:
+    handler: handler.notificar
+    events:
+      - http:
+          path: notificar
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
+    httpPort: 3000
+    noPrependStageToUrl: false
+    pythonBin: "python"
