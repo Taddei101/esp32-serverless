@@ -1,0 +1,26 @@
+name: ESP32 Serverless Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixa o código
+        uses: actions/checkout@v3
+
+      - name: Instala Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Instala dependências
+        run: pip install requests pytest
+
+      - name: Roda os testes
+        run: pytest tests/ -v
